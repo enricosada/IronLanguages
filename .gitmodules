@@ -1,0 +1,3 @@
+[submodule "Languages/Ruby/Tests/mspec/rubyspec"]
+	path = Languages/Ruby/Tests/mspec/rubyspec
+	url = git://github.com/enricosada/rubyspec
