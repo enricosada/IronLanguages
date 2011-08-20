@@ -24,4 +24,17 @@ describe "The -r command line option" do
   it "stops processing remaining files if an exception is thrown" do
     ruby_exe("fixtures/hello", :options => "-r fixtures/raise", :dir => File.dirname(__FILE__)).should_not include("Hello")
   end
+
+  it "can be set from RUBYOPT environment variable" do
+    ["-r #{@test_file}", "-r#{@test_file}"].each do |o|
+      begin
+        ENV['RUBYOPT'] = o
+        result = ruby_exe(@script, :options => "")
+        result.should include(@test_file + ".rb")
+      ensure
+        ENV['RUBYOPT'] = nil
+      end
+    end
+  end
+
 end

@@ -42,4 +42,20 @@ describe "The -I command line option" do
   it "allows non-existent paths" do
     ruby_exe(@script, :options => '-Inon-existent', :dir => File.dirname(__FILE__)).should =~ /^non-existent$/
   end
+
+  it "can be set from RUBYOPT environment variable" do
+    [['-I fixtures',  'fixtures'],
+     ['-Ifixtures',   'fixtures'],
+     ['-I"fixtures"', 'fixtures'],
+     ['-I./fixtures', './fixtures'],
+     ['-I.\fixtures', '.\fixtures']].each do |command_line, resulting_path|
+      begin
+        ENV['RUBYOPT'] = command_line
+        ruby_exe(@script, :options => "", :dir => File.dirname(__FILE__)).should =~ /^#{Regexp.escape(resulting_path)}$/
+      ensure
+        ENV['RUBYOPT'] = nil
+      end    
+    end
+  end
+
 end

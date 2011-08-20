@@ -8,4 +8,13 @@ describe "The -d command line option" do
   it "sets $DEBUG to true" do
     ruby_exe(@script, :options => "-d", :args => "2> #{dev_null()}").chomp.should == "true"
   end
+
+  it "can be set from RUBYOPT environment variable" do
+    begin
+      ENV['RUBYOPT'] = '-d'
+      ruby_exe(@script, :options => "", :args => "2> #{dev_null()}").chomp.should == "true"
+    ensure
+      ENV['RUBYOPT'] = nil
+    end
+  end
 end

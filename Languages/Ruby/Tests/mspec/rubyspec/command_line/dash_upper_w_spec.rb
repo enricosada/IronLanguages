@@ -13,6 +13,15 @@ describe "The -W command line option" do
   it "with 1 sets $VERBOSE to false" do
     ruby_exe(@script, :options => "-W1").chomp.should == "false"
   end
+
+  it "can be set from RUBYOPT environment variable" do
+    begin
+      ENV['RUBYOPT'] = "-W2"
+      ruby_exe(@script, :options => "").chomp.should == "true"
+    ensure
+      ENV['RUBYOPT'] = nil
+    end
+  end
 end
 
 describe "The -W command line option with 2" do
