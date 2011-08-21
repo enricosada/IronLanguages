@@ -1,10 +1,15 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.expand_path('../../spec_helper', __FILE__)
 
 describe "The -r command line option" do
+  before :each do
+    @script = fixture __FILE__, "require.rb"
+    @test_file = fixture __FILE__, "test_file"
+  end
+
   it "requires the specified file" do
-    ["-r fixtures/test_file",
-     "-rfixtures/test_file"].each do |o|
-      ruby_exe("fixtures/require.rb", :options => o, :dir => File.dirname(__FILE__)).should include("fixtures/test_file.rb")
+    ["-r #{@test_file}", "-r#{@test_file}"].each do |o|
+      result = ruby_exe(@script, :options => o)
+      result.should include(@test_file + ".rb")
     end
   end
 
