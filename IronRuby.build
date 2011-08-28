@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         DefaultTargets="Package" >
+  
+  <Target Name="Compile">
+    <MSBuild Projects="Solutions/Ruby.sln" Targets="Build" Properties="Configuration=Release" />
+  </Target>
+
+  <Target Name="Compile_SL4">
+    <MSBuild Projects="Solutions/Ruby.sln" Targets="Build" Properties="Configuration=Silverlight4Release" />
+  </Target>
+
+  <Target Name="Compile_WP7">
+    <MSBuild Projects="Solutions/Ruby.sln" Targets="Build" Properties="Configuration=Silverlight3Release" />
+  </Target>
+
+  <PropertyGroup>
+    <SrcBinDir>bin/Release</SrcBinDir>
+    <SrcSLBinDir>bin/Silverlight4Release</SrcSLBinDir>
+    <SrcWPBinDir>bin/Silverlight3Release</SrcWPBinDir>
+    <PackageDir>bin/Package</PackageDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+
+    <!--Core-->
+    <Package_RootFiles Include="Languages/Ruby/Public/CHANGELOG.txt" />
+    <Package_RootFiles Include="Languages/Ruby/Public/LICENSE.APACHE.html" />
+    <Package_RootFiles Include="Languages/Ruby/Public/LICENSE.CPL.txt" />
+    <Package_RootFiles Include="Languages/Ruby/Public/LICENSE.Ruby.txt" />
+    <Package_RootFiles Include="Languages/Ruby/Public/README.txt" />
+
+    <Package_BinFiles Include="Languages/Ruby/Scripts/bin/*" />
+
+    <Package_BinFiles Include="$(SrcBinDir)/Microsoft.Dynamic.dll" />
+    <Package_BinFiles Include="$(SrcBinDir)/Microsoft.Scripting.dll" />
+    <Package_BinFiles Include="$(SrcBinDir)/Microsoft.Scripting.Metadata.dll" />
+    <Package_BinFiles Include="$(SrcBinDir)/ir.exe" />
+    <Package_BinFiles Include="$(SrcBinDir)/ir64.exe" />
+    <Package_BinFiles Include="$(SrcBinDir)/irw.exe" />
+    <Package_BinFiles Include="$(SrcBinDir)/irw64.exe" />
+    <Package_BinFiles Include="$(SrcBinDir)/IronRuby.dll" />
+    <Package_BinFiles Include="$(SrcBinDir)/IronRuby.Libraries.dll" />
+    <Package_BinFiles Include="$(SrcBinDir)/IronRuby.Libraries.Yaml.dll" />
+
+    <Package_SamplesFiles Include="Languages/Ruby/Samples/**/*" />
+    <Package_LibFiles Include="Languages/Ruby/StdLib/**/*" />
+
+    <!--Silverlight 4-->
+    <Package_SL4_BinFiles Include="$(SrcSLBinDir)/Microsoft.Dynamic.dll" />
+    <Package_SL4_BinFiles Include="$(SrcSLBinDir)/Microsoft.Scripting.dll" />
+    <Package_SL4_BinFiles Include="$(SrcSLBinDir)/Microsoft.Scripting.Silverlight.dll" />
+    <Package_SL4_BinFiles Include="$(SrcSLBinDir)/Chiron.exe" />
+    <Package_SL4_BinFiles Include="$(SrcSLBinDir)/Chiron.exe.config" />
+    <Package_SL4_BinFiles Include="$(SrcSLBinDir)/IronRuby.dll" />
+    <Package_SL4_BinFiles Include="$(SrcSLBinDir)/IronRuby.Libraries.dll" />
+    <Package_SL4_BinFiles Include="$(SrcSLBinDir)/IronRuby.Libraries.Yaml.dll" />
+    <Package_SL4_BinFiles Include="Util/Silverlight/SDK/4.0/System.Numerics.dll" />
+
+    <Package_SL4_ScriptFiles Include="Hosts/Silverlight/Public/script/*" />
+    <Package_SL4_ScriptTemplatesFiles Include="Hosts/Silverlight/Public/script/templates/ruby/**/*" />
+
+    <!--Windows Phone 7-->
+    <Package_WP7_BinFiles Include="$(SrcWPBinDir)/Microsoft.Dynamic.dll" />
+    <Package_WP7_BinFiles Include="$(SrcWPBinDir)/Microsoft.Scripting.dll" />
+    <Package_WP7_BinFiles Include="$(SrcWPBinDir)/Microsoft.Scripting.Core.dll" />
+    <Package_WP7_BinFiles Include="$(SrcWPBinDir)/Microsoft.Scripting.Silverlight.dll" />
+    <Package_WP7_BinFiles Include="$(SrcWPBinDir)/IronRuby.dll" />
+    <Package_WP7_BinFiles Include="$(SrcWPBinDir)/IronRuby.Libraries.dll" />
+    <Package_WP7_BinFiles Include="$(SrcWPBinDir)/IronRuby.Libraries.Yaml.dll" />
+                  
+  </ItemGroup>
+
+  <Target Name="CopyToPackageDir">
+    <RemoveDir Directories="$(PackageDir)" Condition="Exists($(PackageDir))" />
+
+    <Copy SourceFiles="@(Package_RootFiles)" DestinationFolder="$(PackageDir)" />
+    <Copy SourceFiles="@(Package_BinFiles)" DestinationFolder="$(PackageDir)/bin" />
+    <Copy SourceFiles="@(Package_LibFiles)" DestinationFolder="$(PackageDir)/lib/%(RecursiveDir)" />
+    <Copy SourceFiles="@(Package_SamplesFiles)" DestinationFolder="$(PackageDir)/Samples/%(RecursiveDir)" />
+  </Target>
+
+  <Target Name="CopyToPackageDir_SL4">
+    <Copy SourceFiles="@(Package_SL4_BinFiles)" DestinationFolder="$(PackageDir)/Silverlight/bin" />
+    <Copy SourceFiles="@(Package_SL4_ScriptFiles)" DestinationFolder="$(PackageDir)/Silverlight/script" />
+    <Copy SourceFiles="@(Package_SL4_ScriptTemplatesFiles)" DestinationFolder="$(PackageDir)/Silverlight/script/templates/ruby/%(RecursiveDir)" />
+  </Target>
+
+  <Target Name="CopyToPackageDir_WP7">
+    <Copy SourceFiles="@(Package_WP7_BinFiles)" DestinationFolder="$(PackageDir)/WindowsPhone7" />
+  </Target>
+  
+  <Target Name="Package" DependsOnTargets="Compile;CopyToPackageDir;" />
+
+  <Target Name="PackageAll" DependsOnTargets="Package;Compile_SL4;CopyToPackageDir_SL4;Compile_WP7;CopyToPackageDir_WP7" />
+  
+</Project>

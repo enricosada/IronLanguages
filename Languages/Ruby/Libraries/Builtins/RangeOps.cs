@@ -388,7 +388,7 @@ namespace IronRuby.Builtins {
         /// This method requires step to be a Fixnum.
         /// It uses a hybrid string comparison to prevent infinite loops and calls String#succ to get each item in the range.
         /// </remarks>
-        private static IEnumerable<MutableString> EachStepString(ComparisonStorage/*!*/ storage, Range/*!*/ self, int step) {
+        private static IEnumerable<object> EachStepString(ComparisonStorage/*!*/ storage, Range/*!*/ self, int step) {
             Assert.NotNull(storage, self);
             CheckStep(step);
 
