@@ -87,11 +87,11 @@
   </Target>
 
   <Target Name="CopyToPackageDir_WP7">
-    <Copy SourceFiles="@(Package_WP7_BinFiles)" DestinationFolder="$(PackageDir)/WindowsPhone7" />
+    <Copy SourceFiles="@(Package_WP7_BinFiles)" DestinationFolder="$(PackageDir)/Windows Phone 7" />
   </Target>
   
-  <Target Name="Package" DependsOnTargets="Compile;CopyToPackageDir;" />
+  <Target Name="Package_NET" DependsOnTargets="Compile;CopyToPackageDir;" />
 
-  <Target Name="PackageAll" DependsOnTargets="Package;Compile_SL4;CopyToPackageDir_SL4;Compile_WP7;CopyToPackageDir_WP7" />
+  <Target Name="Package_All" DependsOnTargets="Package_NET;Compile_SL4;CopyToPackageDir_SL4;Compile_WP7;CopyToPackageDir_WP7" />
   
 </Project>
