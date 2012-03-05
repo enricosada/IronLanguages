@@ -19,6 +19,7 @@ CurrentVersion.Generated.cs
 TestResult.xml
 Solutions/TestResults/
 Runtime/Samples/Hosting/Scenarios/bin/
+*.ReSharper.user
 
 # TODO - testing scripts should not created this file here
 debug.log
